@@ -15,7 +15,6 @@ class Item(Document):
     manufacturer_name = StringField(required=True,min_length=1)
     is_heavy = BooleanField(required=True)
 
-
     @staticmethod
     def add_item(**kwargs):
         try:
@@ -61,8 +60,9 @@ class Item(Document):
             if 'is_heavy' in kwargs:
                 self.is_heavy = kwargs['is_heavy']
 
+            self.save()
             return True, "Changed item details successfully"
-        
+
         except Exception as ex:
             return False, str(ex)
 

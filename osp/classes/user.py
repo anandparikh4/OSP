@@ -13,24 +13,30 @@ class User(Document):
     name = StringField(required = True,minlength = 1)
     email = EmailField(required = True)
     address = ReferenceField(Address,required=True,reverse_delete_rule=NULLIFY)
-    telephone = IntField(required = True,min_value=10000000000,max_value=9999999999)
+    telephone = IntField(required = True,min_value=1000000000,max_value=9999999999)
 
     def change_data(self,**kwargs):
         try:
-            self.name = kwargs["name"]
-            self.email = kwargs["email"]
-            self.address = kwargs["address"]
-            self.telephone = kwargs["telephone"]
+            if "name" in kwargs :
+                self.name = kwargs["name"]
+            if "email" in kwargs:
+                self.email = kwargs["email"]
+            if "address" in kwargs:
+                self.address = kwargs["address"]
+            if "telephone" in kwargs:
+                self.telephone = kwargs["telephone"]
+            self.save()
             return (True, "Profile information updated successfully")
 
-        except Exception as e:
-            return(False , str(e))
+        except Exception as ex:
+            return(False , str(ex))
 
     def change_password(self,oldpass,newpass):
         try:
             if oldpass != self.password :
                 raise Exception("Wrong password!")
             self.password = newpass
+            self.save()
             return (True,"Password changed")
 
         except Exception as e:
@@ -52,11 +58,11 @@ class Manager(User):
     def change_category(self,item_id,category_id):
 
         try:
-            item = Item.objects(uid = item_id)
+            item = Item.objects(uid = item_id).first()
             if not item :
                 raise Exception("No such item found!")
 
-            category = Category.objects(uid = category_id)
+            category = Category.objects(uid = category_id).first()
             if not category :
                 raise Exception("No such item found!")
 
@@ -109,6 +115,10 @@ class Seller(User):
         return Transaction.objects(seller = self)
 
     def negotiate(self,offer_price):
+        pass
+
+class Buyer:
+    pass
 
 
 

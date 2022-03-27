@@ -19,6 +19,7 @@ def market_page():
     city = "Surat"
     _add = Address(residence_number = residence_number,street =street ,locality = locality,pincode =pincode , state = state ,city=city)
     _add.save()
+    _add.save()
     return "Marketplace"
 
 @app.route("/about/<username>")
