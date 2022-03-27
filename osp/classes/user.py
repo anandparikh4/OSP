@@ -1,5 +1,10 @@
-from mongoengine import Document,StringField,EmailField,IntField,ReferenceField,NULLIFY,CASCADE
+from mongoengine import Document,StringField,EmailField,IntField,DateField,ReferenceField,NULLIFY,CASCADE
 from osp.classes.address import Address
+from osp.classes.item import Item
+from osp.classes.category import Category
+
+TYPE = ("Manager" , "Buyer" , "Seller")
+GENDER = ("Male" , "Female" , "Others")
 
 class User(Document):
     uid = StringField()
@@ -33,6 +38,48 @@ class User(Document):
 
 
 class Manager(User):
+    gender = StringField(default = "MALE" , choices = GENDER)
+    dob = DateField(required = True)
+
+    def type(self):                         # mimicking static variables
+        return "Manager"
+
+    def signup_key(self):
+        key = str("for_managers_only")
+        return key
+
+    def change_category(self,item_id,category_id):
+
+        try:
+            item = Item.objects(uid = item_id)
+            if not item :
+                raise Exception("No such item found!")
+
+            category = Category.objects(uid = category_id)
+            if not category :
+                raise Exception("No such item found!")
+
+            item.category = category
+
+        except Exception as e:
+            return(False,str(e))
+
+    # for adding and removing categories, the static add and remove categories of the class Category can be used directly. No special methods are required in class Manager
+
+    # similarly for deleting items, the static method delete item of class Item can be used directly
+
+
+    def manage_seller(self,seller_id):
+        seller = Seller.objects(uid = seller_id)
+
+        if seller:
+            seller.delete()
+
+        else :
+            raise Exception("No such seller found")
+
+        
+
 
 
 
