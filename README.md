@@ -1,2 +1,2 @@
 # OSP
-Online Sales Portal
+Online Sales Portal by Group 8
