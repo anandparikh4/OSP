@@ -1,5 +1,6 @@
 from mongoengine import Document,StringField,IntField,ImageField,BooleanField,ReferenceField, CASCADE, FloatField
-from osp.classes.category import Category, Seller
+from osp.classes.category import Category
+from osp.classes.user import Seller
 
 
 class Item(Document):
@@ -65,8 +66,16 @@ class Item(Document):
     def search(category_search, name_search):
         if category_search == "all":
             return Item.objects(name__icontains=name_search)
-        else:
-            return Item.objects(category=category_search, name__icontains=name_search)
+
+        try:
+            _category = Category.objects(uid = category_search).first()
+            if not _category:
+                raise Exception("No such category exists")
+
+            return Item.objects(category=_category, name__icontains=name_search)
+
+        except Exception as ex:
+            return (False, str(ex))
 
 
     # class Sold_Products(Document):
