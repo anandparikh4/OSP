@@ -2,6 +2,7 @@ from mongoengine import Document,StringField,EmailField,IntField,DateField,Refer
 from osp.classes.address import Address
 from osp.classes.item import Item
 from osp.classes.category import Category
+from osp.classes.order import Order,Transaction
 
 TYPE = ("Manager" , "Buyer" , "Seller")
 GENDER = ("Male" , "Female" , "Others")
@@ -102,7 +103,13 @@ class Manager(User):
 class Seller(User):
     # for adding and deleting products, static methods of Class Item can be used
     def view_pending_orders(self):
-        return 
+        return Order.objects(seller = self)
+
+    def view_sales(self):
+        return Transaction.objects(seller = self)
+
+    def negotiate(self,offer_price):
+
 
 
 
