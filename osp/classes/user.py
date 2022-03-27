@@ -1,4 +1,4 @@
-from mongoengine import Document,StringField,EmailField,IntField,ReferenceField
+from mongoengine import Document,StringField,EmailField,IntField,ReferenceField,NULLIFY,CASCADE
 from osp.classes.address import Address
 
 class User(Document):
@@ -6,8 +6,8 @@ class User(Document):
     password = StringField(minlength = 8,required = True)
     name = StringField(required = True,minlength = 1)
     email = EmailField(required = True)
-    address = ReferenceField(Address)
-    telephone = IntField(required = True) # Aditya, do that regex thing here. Then delete this comment
+    address = ReferenceField(Address,required=True,reverse_delete_rule=NULLIFY)
+    telephone = IntField(required = True,min_value=10000000000,max_value=9999999999)
 
     def change_data(self,**kwargs):
         try:

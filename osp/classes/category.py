@@ -18,9 +18,9 @@ class Category(Document):
     @staticmethod
     def delete_category(someid):
         try:
-            Category.objects(uid = someid).delete()   # delete the category with that name
-
+            Category.objects(uid = someid).delete()   # delete the category with that id
             return (True,"Category and corresponding items successfully deleted")
+
         except Exception as e:
             return (False, str(e))
 
