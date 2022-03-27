@@ -9,8 +9,7 @@ class Category(Document):
         try:
             new_category = Category(name = name)
             new_category.save()
-            new_category.uid = str( new_category.id ) # different names given to distinguish the ID assigned by MongoDB
-            new_category.save()
+            new_category.update(uid = id)
             return(True,"Category successfully created")
 
         except Exception as e:
