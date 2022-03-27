@@ -43,4 +43,5 @@ class Item(Document):
         if category_search == "all":
             return Item.objects(name__icontains=name_search)
         else:
-            return Item.objects(category=category_search)
+            return Item.objects(category=category_search, name=name_search)
+        

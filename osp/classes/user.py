@@ -32,4 +32,9 @@ class User(Document):
 
 
 
+class Manager(User):
+
+
+
+
 
