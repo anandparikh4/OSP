@@ -18,10 +18,11 @@ class Item(Document):
     @staticmethod
     def add_item(**kwargs):
         try:
-            new_item = Item(kwargs['name'],kwargs['seller'],kwargs['category'],kwargs['photo'],kwargs['price'],kwargs['age'],kwargs['descr'],kwargs['manufacturer_name'],kwargs['is_heavy'])
+            new_item = Item(name=kwargs['name'],seller=kwargs['seller'],category=kwargs['category'],photo=kwargs['photo'],price=kwargs['price'],age=kwargs['age'],
+                            descr=kwargs['descr'],manufacturer_name=kwargs['manufacturer_name'],is_heavy=kwargs['is_heavy'])
             new_item.save()
-            new_item.uid = str(new_item.id)
-            new_item.update()
+            new_item.uid = new_item.id
+            new_item.save()
             return True, "Item added successfully"
         except Exception as ex:
             return False, str(ex)
@@ -68,20 +69,21 @@ class Item(Document):
             return Item.objects(category=category_search, name__icontains=name_search)
 
 
-    class Sold_Products(Document):
-        uid = StringField()
-        name = StringField(required=True)
-        seller_name = StringField(required=True)
-        buyer_name = StringField(required=True)
-        sale_price = FloatField(required=True,min_value=1)
-        photo = ImageField(size=(300,300,True),required=True)
-        category = StringField(required=True)
-
-
-        def add_sold_product(self,**kwargs):
-            self.name = kwargs['name']
-            self.seller_name = kwargs['seller_name']
-            self.buyer_name = kwargs['buyer_name']
-            self.sale_price = kwargs['sale_price']
-            self.photo = kwargs['photo']
-            self.category = kwargs['category']
+    # class Sold_Products(Document):
+    #     uid = StringField()
+    #     name = StringField(required=True)
+    #     seller_name = StringField(required=True)
+    #     buyer_name = StringField(required=True)
+    #     sale_price = FloatField(required=True,min_value=1)
+    #     photo = ImageField(size=(300,300,True),required=True)
+    #     category = StringField(required=True)
+    #
+    # @staticmethod
+    # def add_sold_product(**kwargs):
+    #     sold_item = Sold_Products(name=kwargs['name'],seller_name=kwargs['seller_name'],buyer_name=kwargs['buyer_name'],sale_price=)
+    #     name = kwargs['name']
+    #     seller_name = kwargs['seller_name']
+    #     buyer_name = kwargs['buyer_name']
+    #     sale_price = kwargs['sale_price']
+    #     photo = kwargs['photo']
+    #     category = kwargs['category']
