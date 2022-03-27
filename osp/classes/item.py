@@ -7,7 +7,7 @@ class Item(Document):
     uid = StringField()
     name = StringField(required=True,min_length=1)
     seller = ReferenceField(Seller,required=True,reverse_delete_rule=CASCADE)
-    category = ReferenceField(Category, reverse_delete_rule=CASCADE)
+    category = ReferenceField(Category,required = True, reverse_delete_rule=CASCADE)
     photo = ImageField(size=(300,300,True),required=True)
     price = FloatField(required=True,min_value=1)
     age = IntField(default=0)
@@ -58,7 +58,11 @@ class Item(Document):
             if 'manufacturer_name' in kwargs:
                 self.manufacturer_name = kwargs['manufacturer_name']
 
+            if 'is_heavy' in kwargs:
+                self.is_heavy = kwargs['is_heavy']
+
             return True, "Changed item details successfully"
+        
         except Exception as ex:
             return False, str(ex)
 
