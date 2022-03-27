@@ -24,6 +24,7 @@ class Item(Document):
             new_item.uid = new_item.id
             new_item.save()
             return True, "Item added successfully"
+
         except Exception as ex:
             return False, str(ex)
 
@@ -31,10 +32,11 @@ class Item(Document):
         try:
             self.delete()
             return True,"Deleted successfully"
+
         except Exception as ex:
             return False, str(ex)
 
-    def change_details(self,**kwargs):
+    def change_details(self, **kwargs):
         try:
             if 'name' in kwargs:
                 self.name = kwargs['name']
