@@ -70,15 +70,44 @@ class Manager(User):
 
 
     def manage_seller(self,seller_id):
-        seller = Seller.objects(uid = seller_id)
+        try:
+            seller = Seller.objects(uid = seller_id)
+            if seller:
+                seller.delete()
+                return(True, "Seller deleted")
+            else :
+                raise Exception("No such seller found")
 
-        if seller:
-            seller.delete()
+        except Exception as e:
+            return (False, str(e))
 
-        else :
-            raise Exception("No such seller found")
+    def manage_buyer(self, buyer_id):
+        try:
+            buyer = Buyer.objects(uid=buyer_id)
+            if buyer:
+                buyer.delete()
+                return (True, "Buyer deleted")
+            else:
+                raise Exception("No such buyer found")
 
-        
+        except Exception as e:
+            return (False, str(e))
+
+
+    #def audit(self):    # implement after class Buy Requests
+
+    #def negotiations(self,seller_id,buyer_id):   # implement after class Buy Requests
+
+
+class Seller(User):
+    # for adding and deleting products, static methods of Class Item can be used
+    def view_pending_orders(self):
+        return 
+
+
+
+
+
 
 
 
