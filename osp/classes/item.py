@@ -15,6 +15,7 @@ class Item(Document):
 
     def add_item(self, **kwargs):
         try:
+            self.item_id = str(self.id)
             self.name = kwargs['name']
             self.seller = kwargs['seller']
             self.photo = kwargs['photo']
@@ -25,7 +26,6 @@ class Item(Document):
             self.is_heavy = kwargs['is_heavy']
             self.category = kwargs['category']
             self.save()
-            self.item_id = str(self.id)
             self.save()
             return True,"Item added successfully"
         except Exception as ex:
