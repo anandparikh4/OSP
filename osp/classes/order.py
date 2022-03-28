@@ -50,6 +50,7 @@ class Order(Document):
 
 
 class Transaction(Document):
+    uid = StringField()
     offer_price = FloatField(required = True, min_value=0)
     item_name = StringField(required=True, min_length=1)
     item_id = StringField(required=True,min_length=1)
@@ -65,5 +66,18 @@ class Transaction(Document):
     def create_transaction(order_id):
         try:
             purchase_order = Order.objects(uid=order_id).first()
-            if not purhcase_order:
-                
+
+            if not purchase_order:
+                raise Exception("No such order exists!")
+
+            transaction = Transaction(offer_price=purchase_order.offer_price,item_name=purchase_order.item.name,
+                                      item_id=purchase_order.item.uid,buyer_name=purchase_order.buyer.name,
+                                      buyer_id=purchase_order.buyer.uid,seller_name=purchase_order.seller.name,
+                                      seller_id=purchase_order.seller.uid,photo=purchase_order.item.photo,
+                                      category_name=purchase_order.item.category.name,category_id=purchase_order.item.category.uid)
+            transaction.save()
+            transaction.uid = str(transaction.id)
+            transaction.save()
+            return True, transaction.uid
+        except Exception as ex:
+            return False, str(ex)
