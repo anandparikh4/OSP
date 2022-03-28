@@ -127,11 +127,20 @@ class Manager(User):
         except Exception as ex:
             return  False, str(ex)
 
+    @staticmethod
+    def audit(): #check
+        try:
+            from osp.classes.order import Transaction
+            return True, Transaction.objects #check
+        except Exception as ex:
+            return False, str(ex)
 
-    #def audit(self):    # implement after class Buy Requests
-
-    #def negotiations(self,seller_id,buyer_id):   # implement after class Buy Requests
-
+    def negotiations(self,order_id): #check
+        try:
+            from osp.classes.order import Order
+            return True, Order.objects(uid=order_id).first()
+        except Exception as ex:
+            return False, str(ex)
 
 class Seller(User):
     # for adding and deleting products, static methods of Class Item can be used
