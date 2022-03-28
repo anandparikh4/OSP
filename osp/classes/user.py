@@ -2,7 +2,6 @@ from mongoengine import Document,StringField,EmailField,IntField,DateField,Refer
 from osp.classes.address import Address
 from osp.classes.category import Category
 from osp.interface.sign_up import send_email
-
 TYPE = ("Manager" , "Buyer" , "Seller")
 GENDER = ("Male" , "Female" , "Others")
 
@@ -61,14 +60,15 @@ class Manager(User):
         new_manager.uid = str(new_manager.id)
         new_manager.save()
         mail_txt = f"""Hi {new_manager.name}
-            Greetings from Team OSP. Your login credentials are stated below.
+        
+        Greetings from Team OSP. Your login credentials are stated below.
                         
-            User-ID: {new_manager.uid}
-            Password: {new_manager.password}
+        User-ID: {new_manager.uid}
+        Password: {new_manager.password}
             
-            Regards,
-            Team OSP
-            """
+        Regards,
+        Team OSP
+        """
         send_email("Your \"Manager\" account credentials",mail_txt,new_manager.email)
         return new_manager.uid
 
@@ -150,14 +150,15 @@ class Seller(User):
         new_seller.uid = str(new_seller.id)
         new_seller.save()
         mail_txt = f"""Hi {new_seller.name}
-            Greetings from Team OSP. Your login credentials are stated below.
+        
+        Greetings from Team OSP. Your login credentials are stated below.
 
-            User-ID: {new_seller.uid}
-            Password: {new_seller.password}
+        User-ID: {new_seller.uid}
+        Password: {new_seller.password}
 
-            Regards,
-            Team OSP
-            """
+        Regards,
+        Team OSP
+        """
         send_email("Your \"Seller\" account credentials", mail_txt, new_seller.email)
         return new_seller.uid
 
@@ -191,8 +192,20 @@ class Seller(User):
                 raise Exception("No such order found!")
 
             if status == "ACCEPTED":
-                order.request_status = "ACCEPTED"
+                mail_txt = f'''Hi {order.buyer.name}
+                
+                Greetings from Team OSP. 
+                
+                Your purchase request for the Item: {order.item.name}, Item_ID: {order.item.uid}
+                has been approved by the Seller: {order.seller.name}, Seller_ID: {order.seller.uid} and the offer price
+                is {order.offer_price}. Kindly make payment from the portal to receive the delivery. 
+    
+                Regards,
+                Team OSP
+                '''
+                send_email("Approval of your purchase request", mail_txt,order.buyer.email)
 
+                order.request_status = "ACCEPTED"
                 return True, "Request accepted"
 
             elif status == "REJECTED":
@@ -206,7 +219,7 @@ class Seller(User):
                 Team OSP
                 '''
                 send_email("Rejection of Purchase Request",mail_txt,order.buyer.email)
-                # send mails
+
                 order.item.on_sale = True
                 order.item.save()
                 order.delete()
@@ -232,14 +245,14 @@ class Buyer(User):
         new_buyer.uid = str(new_buyer.id)
         new_buyer.save()
         mail_txt = f"""Hi {new_buyer.name}
-            Greetings from Team OSP. Your login credentials are stated below.
+        Greetings from Team OSP. Your login credentials are stated below.
 
-            User-ID: {new_buyer.uid}
-            Password: {new_buyer.password}
+        User-ID: {new_buyer.uid}
+        Password: {new_buyer.password}
 
-            Regards,
-            Team OSP
-            """
+        Regards,
+        Team OSP
+        """
         send_email("Your \"Buyer\" account credentials", mail_txt, new_buyer.email)
         return new_buyer.uid
 
@@ -263,6 +276,35 @@ class Buyer(User):
             item.on_sale = False
             item.save()
 
+            mail_txt = f'''Hi {item.seller.name}
+            
+            Greetings from Team OSP. A new purchase request has been raised by the Buyer: {self.name}, Buyer_ID: {self.uid}
+            for the Item: {item.name}, Item_ID: {item.uid} and the offer price is {offer}.
+               
+            The buyer's details are mentioned below:
+            Name: {self.name}
+            Mail ID: {self.email}
+            Telephone No.: {self.telephone}
+            
+            Regards,
+            Team OSP
+            '''
+
+            send_email("New Purchase request for your item",mail_txt,seller.email)
+
+            mail_txt2 = f'''Hi {self.name}
+            
+            Greetings from Team OSP. Your purchase request for the Item: {item.name}, Item_ID: {item.uid} has been
+            raised with the offer price is {offer}.
+            Seller's details are mentioned below:   
+            Name: {seller.name}
+            Mail id: {seller.email}
+            Telephone No.: {seller.telephone}
+            
+            Regards,
+            Team OSP
+            '''
+            send_email("Your purchase request",mail_txt2,self.email)
             return True, order_id
 
         except Exception as ex:
@@ -276,7 +318,7 @@ class Buyer(User):
                 raise Exception("No such order exists!")
 
             order.negotiate(offer)
-            return True, "Negotiation request Placed"
+            return True, "Negotiation request placed"
 
         except Exception as ex:
             return False, str(ex)
