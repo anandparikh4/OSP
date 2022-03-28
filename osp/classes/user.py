@@ -192,13 +192,24 @@ class Seller(User):
 
             if status == "ACCEPTED":
                 order.request_status = "ACCEPTED"
+
                 return True, "Request accepted"
 
             elif status == "REJECTED":
+
+                mail_txt = f'''Hi {order.buyer.name}.
+                Greetings from team OSP. 
+                Your purchase request for Item: {order.item.name} , ItemId: {order.item.uid} has been rejected by 
+                Seller: {order.seller.name}, SellerId: {order.seller.uid}.
+
+                Regards,
+                Team OSP
+                '''
+                send_email("Rejection of Purchase Request",mail_txt,order.buyer.email)
+                # send mails
                 order.item.on_sale = True
                 order.item.save()
                 order.delete()
-                # send mails
                 return True, "Request rejected"
 
         except Exception as ex:
