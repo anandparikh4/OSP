@@ -1,10 +1,12 @@
-from mongoengine import FloatField,BooleanField,ReferenceField,StringField,ImageField,CASCADE
+from mongoengine import Document,FloatField,BooleanField,ReferenceField,StringField,ImageField,CASCADE
 from osp.classes.item import Item
 from osp.classes.user import Seller,Buyer
 
 REQUEST_STATUS = ("Pending","Rejected","Accepted")
 
-class Order:
+
+class Order(Document):
+    uid = StringField()
     offer_price = FloatField(required=True,min_value=0)
     item = ReferenceField(Item,reverse_delete_rule=CASCADE,required = True)
     buyer = ReferenceField(Buyer,reverse_delete_rule=CASCADE,required = True)
@@ -16,7 +18,25 @@ class Order:
     @staticmethod
     def create_order(**kwargs):
         try:
-            new_order = Order
+            order_item = Item.objects(uid=kwargs['item']).first()
+            if not order_item:
+                raise Exception("No such item exists!")
+
+            order_buyer = Buyer.objects(uid=kwargs['buyer']).first()
+            if not order_buyer:
+                raise Exception("No such buyer exists!")
+
+            order_seller = Seller.objects(uid=kwargs['seller']).first()
+            if not order_seller:
+                raise Exception("No such seller exists")
+
+            new_order = Order(offer_price=kwargs['offer_price'],item=order_item,buyer=order_buyer,seller=order_seller)
+            new_order.save()
+            new_order.uid = str(new_order.id)
+            new_order.save()
+            return True, new_order.uid
+        except Exception as ex:
+            return False, str(ex)
 
     def negotiate(self, offer):
         try:
@@ -28,7 +48,8 @@ class Order:
         except Exception as e:
             return False, str(e)
 
-class Transaction:
+
+class Transaction(Document):
     offer_price = FloatField(required = True, min_value=0)
     item_name = StringField(required=True, min_length=1)
     item_id = StringField(required=True,min_length=1)
@@ -41,5 +62,8 @@ class Transaction:
     category_id = StringField(required=True,min_length=1)
 
     @staticmethod
-    def create_transaction(order):
-        new_transaction =
+    def create_transaction(order_id):
+        try:
+            purchase_order = Order.objects(uid=order_id).first()
+            if not purhcase_order:
+                
