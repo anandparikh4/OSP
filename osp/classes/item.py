@@ -14,16 +14,25 @@ class Item(Document):
     descr = StringField(default="")
     manufacturer_name = StringField(required=True,min_length=1)
     is_heavy = BooleanField(required=True)
+    on_sale = BooleanField(default=True)
 
     @staticmethod
     def add_item(**kwargs):
         try:
-            new_item = Item(name=kwargs['name'],seller=kwargs['seller'],category=kwargs['category'],photo=kwargs['photo'],price=kwargs['price'],age=kwargs['age'],
+            item_seller = Seller.objects(uid=kwargs['seller']).first()
+            if not item_seller:
+                raise Exception("No such seller exists!")
+
+            item_category = Category.objects(uid=kwargs['category']).first()
+            if not item_category:
+                raise Exception("No such category exists!")
+
+            new_item = Item(name=kwargs['name'],seller=item_seller,category=item_category,photo=kwargs['photo'],price=kwargs['price'],age=kwargs['age'],
                             descr=kwargs['descr'],manufacturer_name=kwargs['manufacturer_name'],is_heavy=kwargs['is_heavy'])
             new_item.save()
-            new_item.uid = new_item.id
+            new_item.uid = str(new_item.id)
             new_item.save()
-            return True, "Item added successfully"
+            return True, new_item.uid
 
         except Exception as ex:
             return False, str(ex)
@@ -31,7 +40,7 @@ class Item(Document):
     def remove_item(self):
         try:
             self.delete()
-            return True,"Deleted successfully"
+            return True, "Deleted successfully"
 
         except Exception as ex:
             return False, str(ex)
@@ -48,7 +57,10 @@ class Item(Document):
                 self.age = kwargs['age']
 
             if 'category' in kwargs:
-                self.category = kwargs['category']
+                category_update = Category.objects(uid=kwargs['category']).first()
+                if not category_update:
+                    raise Exception("No such category exists!")
+                self.category = Category.objects(uid=kwargs['category']).first()
 
             if 'descr' in kwargs:
                 self.descr = kwargs['descr']
@@ -81,7 +93,7 @@ class Item(Document):
             return Item.objects(category=_category, name__icontains=name_search)
 
         except Exception as ex:
-            return (False, str(ex))
+            return False, str(ex)
 
 
     # class Sold_Products(Document):
