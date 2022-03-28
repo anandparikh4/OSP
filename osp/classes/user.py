@@ -113,7 +113,7 @@ class Manager(User):
                 raise Exception("No such seller found!")
 
         except Exception as ex:
-            return  False, str(ex)
+            return False, str(ex)
 
     def manage_buyer(self, buyer_id):
         try:
@@ -131,7 +131,7 @@ class Manager(User):
     def audit(): #check
         try:
             from osp.classes.order import Transaction
-            return True, Transaction.objects #check
+            return True, Transaction.objects() #check
         except Exception as ex:
             return False, str(ex)
 
