@@ -1,6 +1,7 @@
 from mongoengine import Document,StringField,EmailField,IntField,DateField,ReferenceField,NULLIFY,CASCADE
 from osp.classes.address import Address
 from osp.classes.category import Category
+from osp.interface.sign_up import send_email
 
 TYPE = ("Manager" , "Buyer" , "Seller")
 GENDER = ("Male" , "Female" , "Others")
@@ -59,6 +60,16 @@ class Manager(User):
             new_manager.save()
             new_manager.uid = str(new_manager.id)
             new_manager.save()
+            mail_txt = f"""Hi {new_manager.name}
+            Greetings from Team OSP. Your login credentials are stated below.
+                        
+            User-ID: {new_manager.uid}
+            Password: {new_manager.password}
+            
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Manager\" account credentials",mail_txt,new_manager.email)
             return True, new_manager.uid
 
         except Exception as ex:
@@ -139,6 +150,16 @@ class Seller(User):
             new_seller.save()
             new_seller.uid = str(new_seller.id)
             new_seller.save()
+            mail_txt = f"""Hi {new_seller.name}
+            Greetings from Team OSP. Your login credentials are stated below.
+
+            User-ID: {new_seller.uid}
+            Password: {new_seller.password}
+
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Seller\" account credentials", mail_txt, new_seller.email)
             return True, new_seller.uid
 
         except Exception as ex:
@@ -202,6 +223,16 @@ class Buyer(User):
             new_buyer.save()
             new_buyer.uid = str(new_buyer.id)
             new_buyer.save()
+            mail_txt = f"""Hi {new_buyer.name}
+            Greetings from Team OSP. Your login credentials are stated below.
+
+            User-ID: {new_buyer.uid}
+            Password: {new_buyer.password}
+
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Buyer\" account credentials", mail_txt, new_buyer.email)
             return True, new_buyer.uid
 
         except Exception as ex:
@@ -211,7 +242,7 @@ class Buyer(User):
         return "Buyer"
 
     def raise_purchase_request(self,item_id,offer):
-        from osp.classes.order import Order,Transaction
+        from osp.classes.order import Order
         from osp.classes.item import Item
         try:
             item = Item.objects(uid = item_id).first()
@@ -232,7 +263,7 @@ class Buyer(User):
             return False, str(ex)
 
     def negotiate(self,order_id,offer):
-        from osp.classes.order import Order,Transaction
+        from osp.classes.order import Order
         try:
             order = Order.objects(uid = order_id).first()
             if not order :
