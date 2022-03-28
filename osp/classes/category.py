@@ -9,7 +9,8 @@ class Category(Document):
         try:
             new_category = Category(name = name)
             new_category.save()
-            new_category.update(uid = str(id))
+            new_category.uid = str(new_category.id)
+            new_category.save()
             return(True,"Category successfully created")
 
         except Exception as e:
@@ -18,7 +19,8 @@ class Category(Document):
     @staticmethod
     def delete_category(someid):
         try:
-            Category.objects(uid = str(someid)).delete()   # delete the category with that id
+            category_ = Category.objects(uid = str(someid)).first()
+            category_.delete()
             return (True,"Category and corresponding items successfully deleted")
 
         except Exception as e:
