@@ -144,6 +144,9 @@ class Seller(User):
         except Exception as ex:
             return False, str(ex)
 
+    def type(self):
+        return "Seller"
+
     def view_pending_orders(self):
          from osp.classes.order import Order
          return Order.objects(seller=self)
@@ -203,6 +206,9 @@ class Buyer(User):
 
         except Exception as ex:
             return False, str(ex)
+
+    def type(self):
+        return "Buyer"
 
     def raise_purchase_request(self,item_id,offer):
         from osp.classes.order import Order,Transaction
