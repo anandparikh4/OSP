@@ -1,8 +1,6 @@
 from mongoengine import Document,StringField,EmailField,IntField,DateField,ReferenceField,NULLIFY,CASCADE
 from osp.classes.address import Address
-from osp.classes.item import Item
 from osp.classes.category import Category
-from osp.classes.order import Order,Transaction,REQUEST_STATUS
 
 TYPE = ("Manager" , "Buyer" , "Seller")
 GENDER = ("Male" , "Female" , "Others")
@@ -75,7 +73,7 @@ class Manager(User):
 
 
     def change_category(self, item_id, category_id):
-
+        from osp.classes.item import Item
         try:
             item_ = Item.objects(uid=item_id).first()
             if not item_:
@@ -147,12 +145,15 @@ class Seller(User):
             return False, str(ex)
 
     def view_pending_orders(self):
+         from osp.classes.order import Order
          return Order.objects(seller=self)
 
     def view_sales(self):
+         from osp.classes.order import Transaction
          return Transaction.objects(seller = self)
 
     def negotiate(self,order_id,offer):
+        from osp.classes.order import Order
         try:
             order = Order.objects(uid = order_id).first()
             order.negotiate(offer)
@@ -162,7 +163,7 @@ class Seller(User):
             return False, str(ex)
                                                        # order is an object of class Order
     def update_order_status(self,order_id,status):     # status is an enumeration of REQUEST_STATUS
-
+        from osp.classes.order import Order,Transaction
         try:
             order = Order.objects(uid = order_id).first()
             if not order:
@@ -204,7 +205,8 @@ class Buyer(User):
             return False, str(ex)
 
     def raise_purchase_request(self,item_id,offer):
-
+        from osp.classes.order import Order,Transaction
+        from osp.classes.item import Item
         try:
             item = Item.objects(uid = item_id).first()
             if not item :
@@ -224,6 +226,7 @@ class Buyer(User):
             return False, str(ex)
 
     def negotiate(self,order_id,offer):
+        from osp.classes.order import Order,Transaction
         try:
             order = Order.objects(uid = order_id).first()
             if not order :
@@ -236,6 +239,7 @@ class Buyer(User):
             return False, str(ex)
 
     def payment(self,order_id):
+        from osp.classes.order import Order,Transaction
         try:
             order = Order.objects(uid = order_id).first()
             if not order :
@@ -255,9 +259,11 @@ class Buyer(User):
 
 
     def view_pending_orders(self):
+         from osp.classes.order import Order
          return Order.objects(buyer=self)
 
     def view_purchases(self):
+         from osp.classes.order import Transaction
          return Transaction.objects(buyer = self)
 
 
