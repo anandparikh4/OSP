@@ -15,6 +15,7 @@ class Item(Document):
     manufacturer_name = StringField(required=True,min_length=1)
     is_heavy = BooleanField(required=True)
     on_sale = BooleanField(default=True)
+
     @staticmethod
     def add_item(**kwargs):
         try:
