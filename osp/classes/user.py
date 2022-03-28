@@ -302,36 +302,3 @@ class Buyer(User):
     def view_purchases(self):
          from osp.classes.order import Transaction
          return Transaction.objects(buyer = self)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
