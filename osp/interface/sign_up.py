@@ -2,7 +2,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 from decouple import config
-from osp.classes.user import Buyer,Seller,Manager
 
 def send_email(subject,text,receive_address):
     try:
