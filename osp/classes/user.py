@@ -1,4 +1,4 @@
-from mongoengine import Document,StringField,EmailField,IntField,DateField,ReferenceField,NULLIFY,CASCADE
+from mongoengine import Document,StringField,EmailField,IntField,DateField,ReferenceField,NULLIFY,BooleanField
 from osp.classes.address import Address
 from osp.classes.category import Category
 from osp.interface.sign_up import send_email
@@ -12,6 +12,13 @@ class User(Document):
     email = EmailField(required = True)
     address = ReferenceField(Address,required=True,reverse_delete_rule=NULLIFY)
     telephone = IntField(required=True, min_value=1000000000, max_value=9999999999)
+
+    is_authenticated = BooleanField(default = False)
+    is_anonymous = BooleanField(default = False)
+    is_active = BooleanField(default = True)
+
+    def get_id(self):
+        return self.uid
 
     meta = {'allow_inheritance' : True}
 

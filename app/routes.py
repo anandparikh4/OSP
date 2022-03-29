@@ -37,7 +37,6 @@ def sign_in():
     print(req.keys())
     return render_template("sign_in.html")
 
-
 @app.route("/sign_up" , methods = ["GET" ,"POST"])
 def sign_up():
     req = request.form
@@ -48,9 +47,8 @@ def sign_up():
 def manager_sign_up():
     req = request.form
     for i in req.values():
-        print(i)
+        print(type(i))
     return render_template("manager_sign_up.html")
-
 
 @app.route("/welcome" , methods = ["GET" ,"POST"])
 def welcome():
