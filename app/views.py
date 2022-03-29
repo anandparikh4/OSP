@@ -154,7 +154,7 @@ def sign_in():
                 login_user(user3)
                 return redirect("/welcome")
 
-            if ((not user1) and (not user2) and (not user3)):
+            if ( (not user1) and (not user2) and (not user3) ):
                 raise Exception("Invalid login credentials")
     except Exception as ex:
         flash("Invalid login credentials", "error")
