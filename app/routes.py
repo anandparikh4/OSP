@@ -47,5 +47,15 @@ def sign_up():
 @app.route("/manager_sign_up" , methods = ["GET" ,"POST"])
 def manager_sign_up():
     req = request.form
-    print(req.keys())
+    for i in req.values():
+        print(i)
     return render_template("manager_sign_up.html")
+
+
+@app.route("/welcome" , methods = ["GET" ,"POST"])
+def welcome():
+    return render_template("welcome.html")
+
+@app.route("/trial" , methods = ["GET" ,"POST"])
+def trial():
+    return render_template("trial.html")
