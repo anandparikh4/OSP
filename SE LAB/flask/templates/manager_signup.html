@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manager Signup</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='css/signin.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container d-flex p-5 mx-auto flex-column">
+        <div>
+            <h4 class="mt-1 mb-5 pb-1">Manager Signup</h4>
+        </div>
+        <form class="form-group" id="manager-signup" action="/signup" method="POST">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="Name" name="Name" placeholder="name" required>
+                <label for="Name">Name</label>
+            </div>
+            <div class="form-floating">
+                <input type="email" class="form-control" id="Email" name="Email" placeholder="name@example.com"
+                    required>
+                <label for="Email">Email</label>
+            </div>
+            <div class="form-floating">
+                <select class="form-select" id="State" required>
+                    <option selected disabled value="">State</option>
+                    <option>... Karnataka Andhra</option>
+                </select>
+            </div>
+            <div class="form-floating">
+                <select class="form-select" id="City" required>
+                    <option selected disabled value="">City</option>
+                    <option>... Hyderabad Bangalore</option>
+                </select>
+            </div>
+            <input class="form-check-input" type="radio" name="type" id="inlineRadio5" value="manager" checked hidden>
+            <button type="submit" class="btn btn-primary mx-auto w-100">Sign up</button>
+        </form>
+    </div>
+</body>
+
+</html>
