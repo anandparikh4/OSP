@@ -119,9 +119,6 @@ def manager_sign_up():
     return render_template("manager_sign_up.html")
 
 
-
-
-
 @app.route("/welcome" , methods = ["GET" ,"POST"])
 def welcome():
     return render_template("welcome.html")
