@@ -1,3 +1,4 @@
+import datetime
 from app import app
 from functools import wraps
 from flask import json, render_template, jsonify, make_response, send_file, request, redirect, flash, current_app
@@ -6,9 +7,7 @@ from decouple import config
 from osp.classes.user import User,Buyer,Seller,Manager
 from osp.classes.address import Address
 
-#app.secret_key = config["SECRETKEY"]   # make it secret
-app.secret_key = "secret_key"
-
+app.secret_key = config("SECRETKEY")   # made it secret
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "sign_in"
@@ -72,27 +71,56 @@ def sign_up():
             success = False
 
             obj = Address(residence_number=req["residenceno"], street = req["street"], locality = req["locality"], pincode = req["pincode"], state = req["state"], city = req["city"])
-            print(obj)
             obj.save()
 
             if req["type"] == "buyer":
                 success, obj = Buyer.create_buyer(password = req["password"] , name = req["name"] , email = req["email"] , address = obj, telephone = req["telephone"])
 
             elif req["type"] == "seller":
-                success, obj = Seller.create_seller()
+                success, obj = Seller.create_seller(password = req["password"] , name = req["name"] , email = req["email"] , address = obj, telephone = req["telephone"])
 
             if success == True:
-                flash(obj, "info")
-
+                flash("Successful sign-up", "info")
+                return redirect("/sign_in")
             else:
-                flash("Unsuccessful sign up", "error")
-                flash(obj, "error")
+                flash("Unsuccessful sign up", "error") #not working
+                return redirect("/sign_up")
 
     except Exception as ex:
-        flash("Invalid entries! Sign-up failed" , "error")
-        return redirect("/welcome")  # change back to sign in
+        flash("Invalid entries! Sign-up failed", "error") #not working
+        return redirect("/sign_up")
 
     return render_template("sign_up.html")
+
+@app.route("/manager_sign_up", methods=["GET", "POST"])
+def manager_sign_up():
+    req = request.form
+    try:
+        if request.method == "POST":
+            if req["key"] == config("MANAGERKEY"):
+                obj = Address(residence_number=req["residenceno"], street = req["street"], locality = req["locality"], pincode = req["pincode"], state = req["state"],
+                              city=req["city"])
+                obj.save()
+                dob = datetime.datetime.strptime(req['birthday'], "%Y-%m-%d")
+                success, new_manager = Manager.create_manager(password = req["password"] , name = req["name"] , email = req["email"] , address = obj, telephone = req["telephone"],
+                                                              dob=dob,gender=req["gender"])
+                if success == True:
+                    flash("Successful sign-up", "info")
+                    return redirect("/sign_in")
+                else:
+                    flash("Successful sign-up", "info")
+                    return redirect("/manager_sign_up")
+            else:
+                flash("Wrong sign-up key!")
+                return redirect("/manager_sign_up")
+    except Exception as ex:
+        flash(str(ex), "error")
+        return redirect("/manager_sign_up")
+    return render_template("manager_sign_up.html")
+
+
+
+
 
 @app.route("/welcome" , methods = ["GET" ,"POST"])
 def welcome():

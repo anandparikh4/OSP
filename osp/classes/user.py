@@ -2,8 +2,9 @@ from mongoengine import Document,StringField,EmailField,IntField,DateField,Refer
 from osp.classes.address import Address
 from osp.classes.category import Category
 from osp.interface.sign_up import send_email
+
 TYPE = ("Manager" , "Buyer" , "Seller")
-GENDER = ("Male" , "Female" , "Others")
+GENDER = ("Male" , "Female")
 
 class User(Document):
     uid = StringField()
@@ -62,8 +63,10 @@ class Manager(User):
                 name = kwargs["name"],
                 email = kwargs["email"],
                 address = kwargs["address"],
-                telephone = kwargs["telephone"])
-
+                telephone = kwargs["telephone"],
+                gender = kwargs["gender"],
+                dob = kwargs["dob"]
+            )
             new_manager.save()
             new_manager.uid = str(new_manager.id)
             new_manager.save()
@@ -86,9 +89,9 @@ class Manager(User):
     def type(self):
         return "Manager"
 
-    @staticmethod
-    def signup_key():                       # mimicking static variables
-        return str("for_managers_only")
+    # @staticmethod
+    # def signup_key():                       # mimicking static variables
+    #     return str("for_managers_only")
 
 
     def change_category(self, item_id, category_id):
