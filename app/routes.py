@@ -29,12 +29,11 @@ def about_page(username):
 
     return f"<p>about of {username}</p>"
 '''
-
-
 @app.route("/sign_in" , methods = ["GET" ,"POST"])
 def sign_in():
-    req = request.form
-    print(req.keys())
+    if request.method == "POST":
+        req = request.form
+        print(req["password"])
     return render_template("sign_in.html")
 
 @app.route("/sign_up" , methods = ["GET" ,"POST"])

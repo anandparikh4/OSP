@@ -56,29 +56,32 @@ class Manager(User):
 
     @staticmethod
     def create_manager(**kwargs):
+        try:
+            new_manager = Manager(
+                password = kwargs["password"],
+                name = kwargs["name"],
+                email = kwargs["email"],
+                address = kwargs["address"],
+                telephone = kwargs["telephone"])
 
-        new_manager = Manager(
-            password = kwargs["password"],
-            name = kwargs["name"],
-            email = kwargs["email"],
-            address = kwargs["address"],
-            telephone = kwargs["telephone"])
-        new_manager.save()
-        new_manager.uid = str(new_manager.id)
-        new_manager.save()
-        mail_txt = f"""Hi {new_manager.name}
-        
-        Greetings from Team OSP. Your login credentials are stated below.
-                        
-        User-ID: {new_manager.uid}
-        Password: {new_manager.password}
+            new_manager.save()
+            new_manager.uid = str(new_manager.id)
+            new_manager.save()
+            mail_txt = f"""Hi {new_manager.name}
             
-        Regards,
-        Team OSP
-        """
-        send_email("Your \"Manager\" account credentials",mail_txt,new_manager.email)
-        return new_manager.uid
+            Greetings from Team OSP. Your login credentials are stated below.
+                            
+            User-ID: {new_manager.uid}
+            Password: {new_manager.password}
+                
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Manager\" account credentials",mail_txt,new_manager.email)
+            return True,new_manager.uid
 
+        except Exception as ex:
+            return False, str(ex)
 
     def type(self):
         return "Manager"
@@ -154,29 +157,33 @@ class Seller(User):
 
     @staticmethod
     def create_seller(**kwargs):
+        try:
+            new_seller = Seller(
+                password = kwargs["password"],
+                name = kwargs["name"],
+                email = kwargs["email"],
+                address = kwargs["address"],
+                telephone = kwargs["telephone"]
+            )
 
-        new_seller = Seller(
-            password = kwargs["password"],
-            name = kwargs["name"],
-            email = kwargs["email"],
-            address = kwargs["address"],
-            telephone = kwargs["telephone"]
-        )
-        new_seller.save()
-        new_seller.uid = str(new_seller.id)
-        new_seller.save()
-        mail_txt = f"""Hi {new_seller.name}
-        
-        Greetings from Team OSP. Your login credentials are stated below.
+            new_seller.save()
+            new_seller.uid = str(new_seller.id)
+            new_seller.save()
+            mail_txt = f"""Hi {new_seller.name}
+            
+            Greetings from Team OSP. Your login credentials are stated below.
+    
+            User-ID: {new_seller.uid}
+            Password: {new_seller.password}
+    
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Seller\" account credentials", mail_txt, new_seller.email)
+            return True, new_seller.uid
 
-        User-ID: {new_seller.uid}
-        Password: {new_seller.password}
-
-        Regards,
-        Team OSP
-        """
-        send_email("Your \"Seller\" account credentials", mail_txt, new_seller.email)
-        return new_seller.uid
+        except Exception as ex:
+            return False, str(ex)
 
 
     def type(self):
@@ -249,28 +256,34 @@ class Buyer(User):
 
     @staticmethod
     def create_buyer(**kwargs):
+        try:
+            print("Hello first")
+            new_buyer = Buyer(
+                password = kwargs["password"],
+                name = kwargs["name"],
+                email = kwargs["email"],
+                address = kwargs["address"],
+                telephone = kwargs["telephone"]
+            )
 
-        new_buyer = Buyer(
-            password = kwargs["password"],
-            name = kwargs["name"],
-            email = kwargs["email"],
-            address = kwargs["address"],
-            telephone = kwargs["telephone"]
-        )
-        new_buyer.save()
-        new_buyer.uid = str(new_buyer.id)
-        new_buyer.save()
-        mail_txt = f"""Hi {new_buyer.name}
-        Greetings from Team OSP. Your login credentials are stated below.
+            new_buyer.save()
+            new_buyer.uid = str(new_buyer.id)
+            new_buyer.save()
 
-        User-ID: {new_buyer.uid}
-        Password: {new_buyer.password}
+            mail_txt = f"""Hi {new_buyer.name}
+            Greetings from Team OSP. Your login credentials are stated below.
+    
+            User-ID: {new_buyer.uid}
+            Password: {new_buyer.password}
+    
+            Regards,
+            Team OSP
+            """
+            send_email("Your \"Buyer\" account credentials", mail_txt, new_buyer.email)
+            return True, new_buyer.uid
 
-        Regards,
-        Team OSP
-        """
-        send_email("Your \"Buyer\" account credentials", mail_txt, new_buyer.email)
-        return new_buyer.uid
+        except Exception as ex:
+            return False,str(ex)
 
 
     def type(self):
