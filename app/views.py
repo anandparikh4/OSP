@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from decouple import config
 from osp.classes.user import User,Buyer,Seller,Manager
 from osp.classes.address import Address
+from osp.interface.sign_in import signin
 
 app.secret_key = config("SECRETKEY")   # made it secret
 login_manager = LoginManager()
@@ -42,6 +43,7 @@ def is_buyer(f):
             return redirect("/sign_in")
         return f(*args, **kwargs)
     return decorated
+
 
 @app.route("/home")
 @app.route("/")
@@ -119,8 +121,42 @@ def manager_sign_up():
     return render_template("manager_sign_up.html")
 
 
-@app.route("/welcome" , methods = ["GET" ,"POST"])
+@app.route("/welcome" , methods=["GET", "POST"])
 def welcome():
     return render_template("welcome.html")
 
 
+@app.route("/sign_in", methods=["GET", "POST"])
+def sign_in():
+    req = request.form
+    try:
+        if request.method == 'POST':
+            userid = req['userid']
+            password = req['password']
+            user1 = signin(userid, password, "M")
+            user2 = signin(userid, password, "B")
+            user3 = signin(userid, password, "S")
+            if user1:
+                user1.is_authenticated = True
+                user1.save()
+                login_user(user1)
+                return redirect("/welcome")
+
+            elif user2:
+                user2.is_authenticated = True
+                user2.save()
+                login_user(user2)
+                return redirect("/welcome")
+
+            elif user3:
+                user3.is_authenticated = True
+                user3.save()
+                login_user(user3)
+                return redirect("/welcome")
+
+            if ((not user1) and (not user2) and (not user3)):
+                raise Exception("Invalid login credentials")
+    except Exception as ex:
+        flash("Invalid login credentials", "error")
+        return render_template("sign_in.html")
+    return render_template("sign_in.html")
