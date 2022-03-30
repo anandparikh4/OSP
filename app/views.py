@@ -396,6 +396,18 @@ def buyer():
 @is_buyer
 @login_required
 def purchase_requests():
+    req = request.form
+    if request.method == "POST":
+        update_order = Order.objects(uid = req["uid"]).first()
+        success,msg = update_order.negotiate(req["offer"])
+        if success == False:
+            flash(msg,"error")
+
+        return render_template("buyer/purchase_requests.html", orders = Order.objects(buyer=current_user))
+
+
+
+
     return render_template("buyer/purchase_requests.html")
 
 @app.route("/buyer/purchases" , methods = ["GET" ,"POST"])

@@ -38,7 +38,7 @@ class Order(Document):
 
     def negotiate(self, offer):
         if offer < 0:
-            raise Exception("Please enter a valid offer price")
+            return False, "Please enter a valid offer price"
         self.offer_price = offer
         return True, "Offer placed"
 
