@@ -52,9 +52,6 @@ class Transaction(Document):
     buyer_id = StringField(required=True,min_length=1)
     seller_name = StringField(required=True,min_length=1)
     seller_id = StringField(required=True,min_length=1)
-    photo = ImageField(size=(300,300,True),required=True)
-    category_name = StringField(required=True,min_length=1)
-    category_id = StringField(required=True,min_length=1)
 
     @staticmethod
     def create_transaction(order_id):
@@ -67,8 +64,7 @@ class Transaction(Document):
         transaction = Transaction(offer_price=purchase_order.offer_price,item_name=purchase_order.item.name,
                                   item_id=purchase_order.item.uid,buyer_name=purchase_order.buyer.name,
                                   buyer_id=purchase_order.buyer.uid,seller_name=purchase_order.seller.name,
-                                  seller_id=purchase_order.seller.uid,photo=purchase_order.item.photo,
-                                  category_name=purchase_order.item.category.name,category_id=purchase_order.item.category.uid)
+                                  seller_id=purchase_order.seller.uid)
         transaction.save()
         transaction.uid = str(transaction.id)
         transaction.save()
