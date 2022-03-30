@@ -404,6 +404,21 @@ def purchase_requests():
 def purchases():
     return render_template("buyer/purchases.html",payments=Transaction.objects(buyer_id=current_user.uid))
 
+@app.route("/buyer/raise_purchase" , methods = ["GET" ,"POST"])
+@is_buyer
+@login_required
+def buyer_raise_purchase():
+    req = request.form
+    print(1)
+    if request.method == "POST":
+        print("HI")
+        success,order_id =  current_user.raise_purchase_request(req["uid"] , req["offer"])
+        print(order_id)
+        if success == False:
+            flash(order_id , "error")
+
+    return redirect("/buyer")
+
 ###
 # dashboard
 

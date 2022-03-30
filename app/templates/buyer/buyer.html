@@ -31,6 +31,7 @@
 
     {% for item in items %}
         <tbody>
+        {% if item.on_sale %}
         <tr>
 
             <th scope="row">{{ loop.index }}</th>
@@ -38,8 +39,15 @@
             <td>{{item.uid}}</td>
             <td>{{item.category.name}}</td>
             <td>{{item.seller.uid}}</td>
-
+            <td>
+                <form action="/buyer/raise_purchase" method="POST">
+                    <input type="text" name="uid" value="{{item.uid}}" hidden>
+                    <input class="form-control mr-sm-2" type="number" placeholder="Offer Price" name = "offer" required>
+                    <button type="submit" class="btn btn-primary btn-sm">Raise Purchase Request</button>
+                </form>
+            </td>
         </tr>
+        {% endif %}
         </tbody>
     {% endfor %}
 </table>

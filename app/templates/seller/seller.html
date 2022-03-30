@@ -31,6 +31,7 @@
 
     {% for item in items %}
         <tbody>
+        {% if item.on_sale %}
         <tr>
 
             <th scope="row">{{ loop.index }}</th>
@@ -40,6 +41,7 @@
             <td>{{item.seller.uid}}</td>
 
         </tr>
+        {% endif %}
         </tbody>
     {% endfor %}
 </table>
