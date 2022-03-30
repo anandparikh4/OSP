@@ -26,16 +26,16 @@
                 <ul class="list-unstyled components">
 
                     <li>
-                        <a href="/manager/manage_buyers">Manage Buyers</a>
+                        <a href="#">Upload Item</a>
                     </li>
                     <li>
-                        <a href="/manager/manage_sellers">Manage Sellers</a>
+                        <a href="#">View Items</a>
                     </li>
                     <li>
-                        <a href="/manager/audit">Audit</a>
+                        <a href="#">Buy Requests</a>
                     </li>
                     <li>
-                        <a href="/manager/help_negotiations">Help Negotiations</a>
+                        <a href="#">View Sales</a>
                     </li>
                 </ul>
 
@@ -52,12 +52,22 @@
 
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="/manager">Home</a></li>
+                                <li><a href="#">Home</a></li>
                                 <li><a href="#">Logout</a></li>
                             </ul>
                         </div>
                     </div>
                 </nav>
+                <form class="form-inline my-2 my-lg-0">
+                    SEARCH BAR:
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <select class="form-select" id="City" required>
+                        <option selected disabled value="">Category</option>
+                        <option>... Hyderabad Bangalore</option>
+                    </select>
+                    <button class="btn btn-info" type="submit">Search</button>
+                </form>
+
 
             </div>
         </div>
