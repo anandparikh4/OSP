@@ -4,7 +4,7 @@ sys.path.append(".")
 from osp.classes.user import Buyer
 from osp.classes.address import Address
 print("Checking the constructor")
-address = Address(residence_number="D/704, Lodha Meridian", street="Kukatpally", locality="KPHB", city="Hyderabad", state="Andhra Pradesh", pincode="500072")
+address = Address(residence_number="D/704, Lodha Meridian", street="Kukatpally", locality="KPHB", city="Hyderabad", state="Andhra Pradesh", pincode="500072").save()
 try:
     c1=Buyer(password="1234",name="test_buyer", email="iitkgp@email.com", address = address, telephone = "8886077670")
     c1.save()
