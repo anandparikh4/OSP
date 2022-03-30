@@ -231,7 +231,7 @@ class Seller(User):
                 '''
                 send_email("Approval of your purchase request", mail_txt,order.buyer.email)
 
-                order.request_status = "ACCEPTED"
+                order.request_status = "Accepted"
                 return True, "Request accepted"
 
             elif status == "REJECTED":

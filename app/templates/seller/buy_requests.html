@@ -19,7 +19,7 @@
 
     {% for request in orders %}
         <tbody>
-        {% if request.request_status == "PENDING" %}
+        {% if request.request_status == "Pending" %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{request.item.name}}</td>

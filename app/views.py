@@ -313,7 +313,7 @@ def buy_requests():
     req = request.form
     if request.method == "POST":
         update_order = Order.objects(uid = req["uid"]).first()
-        success,msg = update_order.negotiate(req["offer"])
+        success,msg = update_order.negotiate(int(req["offer"]))
         if success == False:
             flash(msg,"error")
 
@@ -339,6 +339,12 @@ def reject_offer():
         current_user.update_order_status(req["uid"] , "REJECTED")
 
     return redirect("/seller/buy_requests")
+
+@app.route("/seller/payments" , methods = ["GET"])
+@is_seller
+@login_required
+def pending_payments():
+    return render_template("/seller/payments.html" , orders = Order.objects(seller = current_user))
 
 @app.route("/seller/items" , methods = ["GET" ,"POST"])
 @is_seller
