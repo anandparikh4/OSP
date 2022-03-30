@@ -288,31 +288,24 @@ def upload_item():
         print("Hi")
         #image = request.files["image"]
         name = req["name"]
-        category = req["uid"]
+        category = Category.objects(uid = req["uid"]).first
         price = req["price"]
-        age = 0
-        if "age" in req.keys() and req["age"] != "":
-            age = int(req["age"])
-
+        age = req["age"]
         manufacturer = req["manufacturer"]
         descr = req["description"]
-
-        if "is_heavy" in req.keys():
-            is_heavy = req["is_heavy"]
-        else:
-            is_heavy = "off"
+        is_heavy = req["is_heavy"]
         var = False
         if is_heavy == "on":
             var = True
 
         print("Hello1")
-        success, new_item = Item.add_item(name=name, seller=current_user.uid, category=category,
-                                          price=price, age=int(age),
+        success, new_item = Item.add_item(name=name, seller=current_user, category=category,
+                                          price=price, age=age,
                                           descr=descr, manufacturer_name=manufacturer,
                                           is_heavy=var)
         print(success)
         if success == False:
-            flash(new_item ,"error")
+            flash(new_item , "error")
 
     return render_template("/seller/upload_item.html" , categories = Category.objects())
 

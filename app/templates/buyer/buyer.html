@@ -3,5 +3,13 @@
 {% block title %}Buyer Home{% endblock title %}
 
 {% block main %}
-
+<form class="form-inline my-2 my-lg-0">
+    SEARCH BAR:
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <select class="form-select" id="City" required>
+        <option selected disabled value="">Category</option>
+        <option>... Hyderabad Bangalore</option>
+    </select>
+    <button class="btn btn-info" type="submit">Search</button>
+</form>
 {% endblock main %}

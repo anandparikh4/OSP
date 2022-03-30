@@ -1,4 +1,4 @@
-from mongoengine import Document,StringField,IntField,ImageField,BooleanField,ReferenceField, CASCADE, FloatField
+from mongoengine import Document,StringField,IntField,BooleanField,ReferenceField, CASCADE, FloatField
 from osp.classes.category import Category
 from osp.classes.user import Seller
 
@@ -8,9 +8,9 @@ class Item(Document):
     name = StringField(required=True,min_length=1)
     seller = ReferenceField(Seller,required=True,reverse_delete_rule=CASCADE)
     category = ReferenceField(Category,required = True, reverse_delete_rule=CASCADE)
-    photo = ImageField(size=(300,300,True),required=True)
+    #photo = ImageField(size=(300,300,True),required=True)
     price = FloatField(required=True,min_value=1)
-    age = IntField(default=0)
+    age = IntField(default=int(0))
     descr = StringField(default="")
     manufacturer_name = StringField(required=True,min_length=1)
     is_heavy = BooleanField(required=True)
@@ -18,24 +18,24 @@ class Item(Document):
 
     @staticmethod
     def add_item(**kwargs):
-        try:
-            item_seller = Seller.objects(uid=kwargs['seller']).first()
-            if not item_seller:
-                raise Exception("No such seller exists!")
+        # try:
+        item_seller = Seller.objects(uid=kwargs['seller']).first()
+        if not item_seller:
+            raise Exception("No such seller exists!")
 
-            item_category = Category.objects(uid=kwargs['category']).first()
-            if not item_category:
-                raise Exception("No such category exists!")
+        item_category = Category.objects(uid=kwargs['category']).first()
+        if not item_category:
+            raise Exception("No such category exists!")
 
-            new_item = Item(name=kwargs['name'],seller=item_seller,category=item_category,photo=kwargs['photo'],price=kwargs['price'],age=kwargs['age'],
-                            descr=kwargs['descr'],manufacturer_name=kwargs['manufacturer_name'],is_heavy=kwargs['is_heavy'])
-            new_item.save()
-            new_item.uid = str(new_item.id)
-            new_item.save()
-            return True, new_item.uid
+        new_item = Item(name=kwargs['name'],seller=item_seller,category=item_category,price=kwargs['price'],age=kwargs['age'],
+                        descr=kwargs['descr'],manufacturer_name=kwargs['manufacturer_name'],is_heavy=kwargs['is_heavy'])
+        new_item.save()
+        new_item.uid = str(new_item.id)
+        new_item.save()
+        return True, new_item.uid
 
-        except Exception as ex:
-            return False, str(ex)
+        # except Exception as ex:
+        #     return False, str(ex)
 
     def remove_item(self):
         try:
@@ -65,9 +65,6 @@ class Item(Document):
             if 'descr' in kwargs:
                 self.descr = kwargs['descr']
 
-            if 'photo' in kwargs:
-                self.photo = kwargs['photo']
-
             if 'manufacturer_name' in kwargs:
                 self.manufacturer_name = kwargs['manufacturer_name']
 
@@ -90,7 +87,7 @@ class Item(Document):
             if not _category:
                 raise Exception("No such category exists")
 
-            return Item.objects(category=_category, name__icontains=name_search)
+            return Item.objects(category=_category, name_icontains=name_search)
 
         except Exception as ex:
             return False, str(ex)
