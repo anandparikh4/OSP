@@ -9,6 +9,8 @@ from app import app
 from osp.classes.address import Address
 from osp.classes.user import User, Buyer, Seller, Manager
 from osp.interface.sign_in import signin
+from osp.classes.order import Order,Transaction
+from osp.classes.item import Item
 
 app.secret_key = config("SECRETKEY")   # made it secret
 login_manager = LoginManager()
@@ -23,7 +25,7 @@ def load_user(userid):
 def is_manager(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if (current_user.is_anonymous) or current_user.type() != "Manager":
+        if current_user.is_anonymous or current_user.type() != "Manager":
             flash("Please login as a Manager to access this page!")
             return redirect("/sign_in")
         return f(*args, **kwargs)
@@ -195,25 +197,35 @@ def manager():
 @is_manager
 @login_required
 def manage_buyers():
-    return render_template("manager/manage_buyers.html")
+    req = request.form
+    if request.method == "POST":
+        buyer_to_delete = Buyer.objects(uid = req["uid"]).first()
+        buyer_to_delete.delete()
+
+    return render_template("manager/manage_buyers.html",buyers=Buyer.objects())
 
 @app.route("/manager/manage_sellers" , methods = ["GET" ,"POST"])
 @is_manager
 @login_required
 def manage_sellers():
-    return render_template("manager/manage_sellers.html")
+    req = request.form
+    if request.method == "POST":
+        seller_to_delete = Seller.objects(uid=req["uid"]).first()
+        seller_to_delete.delete()
+
+    return render_template("manager/manage_sellers.html", sellers=Seller.objects())
 
 @app.route("/manager/audit" , methods = ["GET" ,"POST"])
 @is_manager
 @login_required
 def audit():
-    return render_template("manager/audit.html")
+    return render_template("manager/audit.html",payments=Transaction.objects())
 
 @app.route("/manager/help_negotiations" , methods = ["GET" ,"POST"])
 @is_manager
 @login_required
 def help_negotiations():
-    return render_template("manager/help_negotiations.html")
+    return render_template("manager/help_negotiations.html" , )
 
 
 # seller routes
@@ -279,6 +291,6 @@ def dashboard():
     return render_template("dashboard.html")
 
 
-
-
-
+# @app.route("/remove", methods = ["GET","POST"])
+# @is_manager
+# @login_required
