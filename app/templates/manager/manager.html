@@ -25,6 +25,7 @@
             <th scope="col">Name</th>
             <th scope="col">Item ID</th>
             <th scope="col">Category</th>
+            <th scope="col">Price</th>
             <th scope="col">Seller ID</th>
         </tr>
     </thead>
@@ -37,6 +38,7 @@
             <td>{{item.name}}</td>
             <td>{{item.uid}}</td>
             <td>{{item.category.name}}</td>
+            <td>{{item.price}}</td>
             <td>{{item.seller.uid}}</td>
             <td>
                 <form action="/manager/remove" method="POST">

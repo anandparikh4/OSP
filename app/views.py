@@ -452,7 +452,7 @@ def purchases():
 @login_required
 def buyer_raise_purchase():
     req = request.form
-    print(1)
+
     if request.method == "POST":
         print("HI")
         success,order_id =  current_user.raise_purchase_request(req["uid"] , req["offer"])

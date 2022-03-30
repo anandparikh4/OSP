@@ -305,6 +305,9 @@ class Buyer(User):
             if not seller :
                 raise Exception("No such seller found!")
 
+            if item.is_heavy and (seller.address.city != self.address.city):
+                raise Exception("Item is Heavy and cities are different, so purchase request rejected")
+
             order_id = Order.create_order(offer_price = offer , item = item.uid , seller = seller.uid , buyer = self.uid)
             item.on_sale = False
             item.save()
