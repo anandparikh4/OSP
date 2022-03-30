@@ -403,12 +403,7 @@ def purchase_requests():
         if success == False:
             flash(msg,"error")
 
-        return render_template("buyer/purchase_requests.html", orders = Order.objects(buyer=current_user))
-
-
-
-
-    return render_template("buyer/purchase_requests.html")
+    return render_template("buyer/purchase_requests.html", orders = Order.objects(buyer=current_user))
 
 @app.route("/buyer/purchases" , methods = ["GET" ,"POST"])
 @is_buyer
