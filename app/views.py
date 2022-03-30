@@ -275,7 +275,13 @@ def buy_requests():
 @is_seller
 @login_required
 def items():
-    return render_template("seller/items.html")
+    req = request.form
+
+    if request.method == "POST":
+        success,obj = Item.objects(uid=req["uid"]).first().remove_item()
+        if not success:
+            flash(obj,"error")
+    return render_template("seller/items.html",products=Item.objects(seller=Seller.objects(uid=current_user.uid).first()))
 
 @app.route("/seller/upload_item" , methods = ["GET" ,"POST"])
 @is_seller
@@ -341,9 +347,7 @@ def purchase_requests():
 @is_buyer
 @login_required
 def purchases():
-    return render_template("buyer/purchases.html")
-
-
+    return render_template("buyer/purchases.html",payments=Transaction.objects(buyer_id=current_user.uid))
 
 ###
 # dashboard
