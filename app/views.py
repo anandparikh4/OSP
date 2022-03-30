@@ -1,11 +1,13 @@
 import datetime
-from app import app
 from functools import wraps
-from flask import json, render_template, jsonify, make_response, send_file, request, redirect, flash, current_app
-from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+
 from decouple import config
-from osp.classes.user import User,Buyer,Seller,Manager
+from flask import render_template, request, redirect, flash
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+
+from app import app
 from osp.classes.address import Address
+from osp.classes.user import User, Buyer, Seller, Manager
 from osp.interface.sign_in import signin
 
 app.secret_key = config("SECRETKEY")   # made it secret
@@ -17,6 +19,7 @@ login_manager.login_view = "sign_in"
 def load_user(userid):
     return User.objects(uid = userid).first()
 
+
 def is_manager(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -26,6 +29,7 @@ def is_manager(f):
         return f(*args, **kwargs)
     return decorated
 
+
 def is_seller(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -34,6 +38,7 @@ def is_seller(f):
             return redirect("/sign_in")
         return f(*args, **kwargs)
     return decorated
+
 
 def is_buyer(f):
     @wraps(f)
@@ -120,9 +125,15 @@ def manager_sign_up():
         return redirect("/manager_sign_up")
     return render_template("manager_sign_up.html")
 
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+       return redirect("sign_in")
+
 
 @app.route("/welcome" , methods=["GET", "POST"])
+@login_required
 def welcome():
+    # flash("this is test message")
     return render_template("welcome.html")
 
 
@@ -160,3 +171,13 @@ def sign_in():
         flash("Invalid login credentials", "error")
         return render_template("sign_in.html")
     return render_template("sign_in.html")
+
+
+@app.route("/sign_out")
+@login_required
+def logout():
+    user = current_user
+    user.is_authenticated = False
+    user.save()
+    logout_user()
+    return redirect("/sign_in")
