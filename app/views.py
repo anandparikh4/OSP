@@ -23,7 +23,7 @@ def load_user(userid):
 def is_manager(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if (current_user.is_anonymous) or current_user.type != "Manager":
+        if (current_user.is_anonymous) or current_user.type() != "Manager":
             flash("Please login as a Manager to access this page!")
             return redirect("/sign_in")
         return f(*args, **kwargs)
@@ -33,7 +33,7 @@ def is_manager(f):
 def is_seller(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if (current_user.is_anonymous) or current_user.type != "Seller":
+        if (current_user.is_anonymous) or current_user.type() != "Seller":
             flash("Please login as a Seller to access this page!")
             return redirect("/sign_in")
         return f(*args, **kwargs)
@@ -43,7 +43,7 @@ def is_seller(f):
 def is_buyer(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if (current_user.is_anonymous) or current_user.type != "Buyer":
+        if (current_user.is_anonymous) or current_user.type() != "Buyer":
             flash("Please login as a Buyer to access this page!")
             return redirect("/sign_in")
         return f(*args, **kwargs)
