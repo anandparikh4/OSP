@@ -40,6 +40,7 @@ class Order(Document):
         if offer < 0:
             return False, "Please enter a valid offer price"
         self.offer_price = offer
+        self.save()
         return True, "Offer placed"
 
 

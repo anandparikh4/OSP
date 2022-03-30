@@ -17,8 +17,9 @@
         </tr>
     </thead>
 
-    {% for requests in pending_orders %}
+    {% for request in orders %}
         <tbody>
+        {% if request.request_status == "PENDING" %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{request.item.name}}</td>
@@ -28,7 +29,28 @@
             <td>{{request.buyer.email}}</td>
             <td>{{request.buyer.telephone}}</td>
             <td>{{request.offer_price}}</td>
+            <td>
+                <form action="/seller/buy_requests" method="POST">
+                    <input type="text" name="uid" value="{{request.uid}}" hidden>
+                    <input class="form-control mr-sm-2" type="number" placeholder="Offer" name = "offer" required>
+                    <button type="submit" class="btn btn-primary btn-sm">Negotiate</button>
+                </form>
+            </td>
+            <td>
+                <form action="/seller/accept" method="POST">
+                    <input type="text" name="uid" value="{{request.uid}}" hidden>
+                    <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                </form>
+            </td>
+            <td>
+                <form action="/seller/reject" method="POST">
+                    <input type="text" name="uid" value="{{request.uid}}" hidden>
+                    <button type="submit" class="btn btn-primary btn-sm">Reject</button>
+                </form>
+            </td>
+
         </tr>
+        {% endif %}
         </tbody>
     {% endfor %}
 </table>

@@ -309,7 +309,36 @@ def seller():
 @is_seller
 @login_required
 def buy_requests():
-    return render_template("seller/buy_requests.html")
+
+    req = request.form
+    if request.method == "POST":
+        update_order = Order.objects(uid = req["uid"]).first()
+        success,msg = update_order.negotiate(req["offer"])
+        if success == False:
+            flash(msg,"error")
+
+    return render_template("seller/buy_requests.html" , orders = Order.objects(seller = current_user))
+
+@app.route("/seller/accept" , methods = ["GET" , "POST"])
+@is_seller
+@login_required
+def accept_offer():
+
+    req = request.form
+    if request.method == "POST":
+        current_user.update_order_status(req["uid"] , "ACCEPTED")
+
+    return redirect("/seller/buy_requests")
+
+@app.route("/seller/reject", methods=["GET", "POST"])
+@is_seller
+@login_required
+def reject_offer():
+    req = request.form
+    if request.method == "POST":
+        current_user.update_order_status(req["uid"] , "REJECTED")
+
+    return redirect("/seller/buy_requests")
 
 @app.route("/seller/items" , methods = ["GET" ,"POST"])
 @is_seller
@@ -399,7 +428,8 @@ def purchase_requests():
     req = request.form
     if request.method == "POST":
         update_order = Order.objects(uid = req["uid"]).first()
-        success,msg = update_order.negotiate(req["offer"])
+        success,msg = update_order.negotiate(int(req["offer"]))
+
         if success == False:
             flash(msg,"error")
 
