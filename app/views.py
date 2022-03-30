@@ -192,7 +192,22 @@ def sign_out():
 @is_manager
 @login_required
 def manager():
-    return render_template("manager/manager.html")
+
+    req = request.form
+    if request.method == "POST":
+
+        category = req["category"]
+        name = req["name"]
+
+        success , obj = Item.search(category,name)
+
+        if success == False:
+            flash(obj , "error")
+            return render_template("manager/manager.html", items=Item.objects(), categories=Category.objects())
+
+        return render_template("manager/manager.html", items=obj, categories=Category.objects())
+
+    return render_template("manager/manager.html" , items = Item.objects(), categories = Category.objects())
 
 @app.route("/manager/manage_buyers" , methods = ["GET" ,"POST"])
 @is_manager
@@ -263,7 +278,21 @@ def delete_category():
 @is_seller
 @login_required
 def seller():
-    return render_template("seller/seller.html")
+    req = request.form
+    if request.method == "POST":
+
+        category = req["category"]
+        name = req["name"]
+
+        success , obj = Item.search(category,name)
+
+        if success == False:
+            flash(obj , "error")
+            return render_template("seller/seller.html", items=Item.objects(), categories=Category.objects())
+
+        return render_template("seller/seller.html", items=obj, categories=Category.objects())
+
+    return render_template("seller/seller.html" , items = Item.objects(), categories = Category.objects())
 
 @app.route("/seller/buy_requests" , methods = ["GET" ,"POST"])
 @is_seller
@@ -335,7 +364,21 @@ def sales():
 @is_buyer
 @login_required
 def buyer():
-    return render_template("buyer/buyer.html")
+    req = request.form
+    if request.method == "POST":
+
+        category = req["category"]
+        name = req["name"]
+
+        success , obj = Item.search(category,name)
+
+        if success == False:
+            flash(obj , "error")
+            return render_template("buyer/buyer.html", items=Item.objects(), categories=Category.objects())
+
+        return render_template("buyer/buyer.html", items=obj, categories=Category.objects())
+
+    return render_template("buyer/buyer.html" , items = Item.objects(), categories = Category.objects())
 
 @app.route("/buyer/purchase_requests" , methods = ["GET" ,"POST"])
 @is_buyer

@@ -80,6 +80,7 @@ class Item(Document):
     @staticmethod
     def search(category_search, name_search):
         if category_search == "all":
+            print("All categories")
             return Item.objects(name__icontains=name_search)
 
         try:
@@ -87,7 +88,7 @@ class Item(Document):
             if not _category:
                 raise Exception("No such category exists")
 
-            return Item.objects(category=_category, name_icontains=name_search)
+            return True,Item.objects(category=_category, name__icontains=name_search)
 
         except Exception as ex:
             return False, str(ex)
