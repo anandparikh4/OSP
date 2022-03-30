@@ -2,8 +2,7 @@ from mongoengine import Document,FloatField,BooleanField,ReferenceField,StringFi
 from osp.classes.item import Item
 from osp.classes.user import Seller,Buyer
 
-REQUEST_STATUS = ("Pending","Rejected","Accepted")
-
+REQUEST_STATUS = ("PENDING","REJECTED","ACCEPTED")
 
 class Order(Document):
     uid = StringField()
@@ -11,7 +10,7 @@ class Order(Document):
     item = ReferenceField(Item,reverse_delete_rule=CASCADE,required = True)
     buyer = ReferenceField(Buyer,reverse_delete_rule=CASCADE,required = True)
     seller = ReferenceField(Seller,reverse_delete_rule=CASCADE,required = True)
-    request_status = StringField(default="Pending",choices = REQUEST_STATUS)
+    request_status = StringField(default="PENDING",choices = REQUEST_STATUS)
     delivery_status = BooleanField(default = False)
     payment_status = BooleanField(default = False)
 

@@ -231,8 +231,9 @@ class Seller(User):
                 '''
                 send_email("Approval of your purchase request", mail_txt,order.buyer.email)
 
-                order.request_status = "Accepted"
-                return True, "Request accepted"
+                order.request_status = "ACCEPTED"
+                order.save()
+                return True, "Request ACCEPTED"
 
             elif status == "REJECTED":
 
@@ -369,7 +370,7 @@ class Buyer(User):
                 return True, transaction_id
 
             else:
-                raise Exception("Request has not yet been approved")
+                return False, "Request has not yet been approved"
 
         except Exception as ex:
             return True, str(ex)

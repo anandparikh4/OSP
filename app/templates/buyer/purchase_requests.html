@@ -1,6 +1,6 @@
 {% extends "buyer/base.html" %}
 
-{% block title %}MPurchase Requests{% endblock title %}
+{% block title %}Purchase Requests{% endblock title %}
 
 {% block main %}
 <form method="GET" id="my_form"></form>
@@ -20,6 +20,7 @@
 
     {% for order in orders %}
         <tbody>
+        {% if order.request_status == "PENDING" %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{order.item.name}}</td>
@@ -36,6 +37,7 @@
                 </form>
             </td>
         </tr>
+        {% endif %}
         </tbody>
     {% endfor %}
 </table>

@@ -402,7 +402,7 @@ def upload_item():
 @is_seller
 @login_required
 def sales():
-    return render_template("seller/sales.html")
+    return render_template("seller/sales.html" , payments = Transaction.objects(seller_id = current_user.uid))
 
 
 # buyer routes
@@ -461,6 +461,19 @@ def buyer_raise_purchase():
             flash(order_id , "error")
 
     return redirect("/buyer")
+
+@app.route("/buyer/payments" , methods = ["GET" ,"POST"])
+@is_buyer
+@login_required
+def buyer_payments():
+    req = request.form
+    if request.method == "POST":
+        success, obj = current_user.payment(req["uid"])
+        print(success)
+        if success == False:
+            flash(obj , "error")
+
+    return render_template("buyer/payments.html",orders=Order.objects(buyer=current_user))
 
 ###
 # dashboard
