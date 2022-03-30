@@ -172,7 +172,7 @@ def sign_in():
         return render_template("sign_in.html")
     return render_template("sign_in.html")
 
-<<<<<<< HEAD
+
 
 @app.route("/sign_out")
 @login_required
@@ -182,5 +182,4 @@ def logout():
     user.save()
     logout_user()
     return redirect("/sign_in")
-=======
->>>>>>> 1767473b90f99ff8360b5bd7cd08577d9823179c
+

@@ -64,8 +64,9 @@ def purchase_requests():
 def purchases():
     return render_template("buyer/purchases.html")
 
-
-
+@app.route("/dashboard" , methods = ["GET" ,"POST"])
+def dashboard():
+    return render_template("dashboard.html")
 
 
 
