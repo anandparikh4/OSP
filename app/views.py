@@ -231,6 +231,17 @@ def manage_sellers():
 
     return render_template("manager/manage_sellers.html", sellers=Seller.objects())
 
+@app.route("/manager/remove" , methods = ["GET" ,"POST"])
+@is_manager
+@login_required
+def manager_remove():
+    req = request.form
+    if request.method == "POST":
+        item_to_delete = Item.objects(uid = req["uid"]).first()
+        item_to_delete.delete()
+
+    return redirect("/manager")
+
 @app.route("/manager/audit" , methods = ["GET" ,"POST"])
 @is_manager
 @login_required
@@ -350,6 +361,7 @@ def upload_item():
             flash(new_item ,"error")
 
     return render_template("/seller/upload_item.html" , categories = Category.objects())
+
 
 @app.route("/seller/sales" , methods = ["GET" ,"POST"])
 @is_seller

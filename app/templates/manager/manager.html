@@ -38,7 +38,12 @@
             <td>{{item.uid}}</td>
             <td>{{item.category.name}}</td>
             <td>{{item.seller.uid}}</td>
-
+            <td>
+                <form action="/manager/remove" method="POST">
+                    <input type="text" name="uid" value="{{item.uid}}" hidden>
+                    <button type="submit" class="btn btn-primary btn-sm">Remove</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     {% endfor %}
